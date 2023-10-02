@@ -20,49 +20,51 @@ public class WorkItemDaoService {
     private WorkItemStatus workItemStatus;
     @Autowired
     private WorkItemPriority workItemPriority;
+    @Autowired
+    private WorkItemRepository workItemRepository;
 
-    private List<WorkItem> workItems;
-    private int workItemCount;
+//    private List<WorkItem> workItems;
+//    private int workItemCount;
 
 //    public WorkItemDaoService(UserDaoService userDaoService, SprintDaoService sprintDaoService) {
 //        userDaoService = userDaoService;
 //        sprintDaoService = sprintDaoService;
 //    }
 
-    @PostConstruct
-    public void init() {
-        workItems = new ArrayList<>();
-        workItemCount = 3001;
-        workItems.add(new WorkItem(getNewWorkItemId(), "Task-1", "Task-1 Desc-1",
-                "Sprint-1", sprintDaoService.getSprintIdFromName("Sprint-1"),
-                LocalDate.now().plusDays(10), "NEW",
-                workItemStatus.getStatusCode("NEW"),
-                "LOW", workItemPriority.getPriorityCode("LOW"), "user1",
-                userDaoService.getUserIdFromName("user1"), "user2",
-                userDaoService.getUserIdFromName("user2"), LocalDate.now()));
-        workItems.add(new WorkItem(getNewWorkItemId(), "Task-1", "Task-1 Desc-1",
-                "Sprint-1", sprintDaoService.getSprintIdFromName("Sprint-1"),
-                LocalDate.now().plusDays(10), "NEW",
-                workItemStatus.getStatusCode("NEW"),
-                "LOW", workItemPriority.getPriorityCode("LOW"), "user2",
-                userDaoService.getUserIdFromName("user2"), "user3",
-                userDaoService.getUserIdFromName("user3"), LocalDate.now()));
-        workItems.add(new WorkItem(getNewWorkItemId(), "Task-1", "Task-1 Desc-1",
-                "Sprint-1", sprintDaoService.getSprintIdFromName("Sprint-1"),
-                LocalDate.now().plusDays(10), "ONGOING",
-                workItemStatus.getStatusCode("ONGOING"),
-                "LOW", workItemPriority.getPriorityCode("LOW"), "user3",
-                userDaoService.getUserIdFromName("user3"), "user1",
-                userDaoService.getUserIdFromName("user1"), LocalDate.now()));
-    }
+//    @PostConstruct
+//    public void init() {
+//        workItems = new ArrayList<>();
+//        workItemCount = 3001;
+//        workItems.add(new WorkItem(getNewWorkItemId(), "Task-1", "Task-1 Desc-1",
+//                "Sprint-1", sprintDaoService.getSprintIdFromName("Sprint-1"),
+//                LocalDate.now().plusDays(10), "NEW",
+//                workItemStatus.getStatusCode("NEW"),
+//                "LOW", workItemPriority.getPriorityCode("LOW"), "user1",
+//                userDaoService.getUserIdFromName("user1"), "user2",
+//                userDaoService.getUserIdFromName("user2"), LocalDate.now()));
+//        workItems.add(new WorkItem(getNewWorkItemId(), "Task-1", "Task-1 Desc-1",
+//                "Sprint-1", sprintDaoService.getSprintIdFromName("Sprint-1"),
+//                LocalDate.now().plusDays(10), "NEW",
+//                workItemStatus.getStatusCode("NEW"),
+//                "LOW", workItemPriority.getPriorityCode("LOW"), "user2",
+//                userDaoService.getUserIdFromName("user2"), "user3",
+//                userDaoService.getUserIdFromName("user3"), LocalDate.now()));
+//        workItems.add(new WorkItem(getNewWorkItemId(), "Task-1", "Task-1 Desc-1",
+//                "Sprint-1", sprintDaoService.getSprintIdFromName("Sprint-1"),
+//                LocalDate.now().plusDays(10), "ONGOING",
+//                workItemStatus.getStatusCode("ONGOING"),
+//                "LOW", workItemPriority.getPriorityCode("LOW"), "user3",
+//                userDaoService.getUserIdFromName("user3"), "user1",
+//                userDaoService.getUserIdFromName("user1"), LocalDate.now()));
+//    }
 
-    private int getNewWorkItemId() {
-        return workItemCount++;
-    }
+//    private int getNewWorkItemId() {
+//        return workItemCount++;
+//    }
 
     public void addWorkItem(WorkItem newWorkItem, boolean isNewWorkItem) {
         if (isNewWorkItem) {
-            newWorkItem.setWorkItemId(getNewWorkItemId());
+//            newWorkItem.setWorkItemId(getNewWorkItemId());
             newWorkItem.setStatusCode(workItemStatus.getStatusCode(newWorkItem.getStatus()));
             newWorkItem.setSprintId(sprintDaoService.getSprintIdFromName(newWorkItem.getSprint()));
             newWorkItem.setPriorityCode(workItemPriority.getPriorityCode(newWorkItem.getPriority()));
@@ -70,33 +72,38 @@ public class WorkItemDaoService {
             newWorkItem.setCreatorId(userDaoService.getUserIdFromName(newWorkItem.getCreatorName()));
             newWorkItem.setCreationDate(LocalDate.now());
         }
-        workItems.add(newWorkItem);
+//        workItems.add(newWorkItem);
+        workItemRepository.save(newWorkItem);
     }
 
     public List<WorkItem> getTasksForFilters(String sprint, String assignee, boolean newFilter,
                                              boolean ongoingFilter, boolean completedFilter) {
-        int assigneeId = userDaoService.getUserIdFromName(assignee);
+        long assigneeId = userDaoService.getUserIdFromName(assignee);
+        long sprintId = sprintDaoService.getSprintIdFromName(sprint);
         List<WorkItem> workItemList = new ArrayList<>();
         if (newFilter) {
-            workItemList.addAll(workItems.stream().filter(
-                    workItem -> workItem.getAssigneeId() == assigneeId &&
-                            workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
-                            workItem.getStatusCode() == WorkItemStatus.NEW
-            ).toList());
+//            workItemList.addAll(workItems.stream().filter(
+//                    workItem -> workItem.getAssigneeId() == assigneeId &&
+//                            workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
+//                            workItem.getStatusCode() == WorkItemStatus.NEW
+//            ).toList());
+            workItemList.addAll(workItemRepository.findByAssigneeIdAndSprintIdAndStatusCode(assigneeId, sprintId, WorkItemStatus.NEW));
         }
         if (ongoingFilter) {
-            workItemList.addAll(workItems.stream().filter(
-                    workItem -> workItem.getAssigneeId() == assigneeId &&
-                            workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
-                            workItem.getStatusCode() == WorkItemStatus.ONGOING
-            ).toList());
+//            workItemList.addAll(workItems.stream().filter(
+//                    workItem -> workItem.getAssigneeId() == assigneeId &&
+//                            workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
+//                            workItem.getStatusCode() == WorkItemStatus.ONGOING
+//            ).toList());
+            workItemList.addAll(workItemRepository.findByAssigneeIdAndSprintIdAndStatusCode(assigneeId, sprintId, WorkItemStatus.ONGOING));
         }
         if (completedFilter) {
-            workItemList.addAll(workItems.stream().filter(
-                    workItem -> workItem.getAssigneeId() == assigneeId &&
-                            workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
-                            workItem.getStatusCode() == WorkItemStatus.COMPLETED
-            ).toList());
+//            workItemList.addAll(workItems.stream().filter(
+//                    workItem -> workItem.getAssigneeId() == assigneeId &&
+//                            workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
+//                            workItem.getStatusCode() == WorkItemStatus.COMPLETED
+//            ).toList());
+            workItemList.addAll(workItemRepository.findByAssigneeIdAndSprintIdAndStatusCode(assigneeId, sprintId, WorkItemStatus.COMPLETED));
         }
         return workItemList;
     }
@@ -104,39 +111,46 @@ public class WorkItemDaoService {
     public List<WorkItem> getTasksForFilters(String sprint, boolean newFilter,
                                              boolean ongoingFilter, boolean completedFilter) {
         List<WorkItem> workItemList = new ArrayList<>();
+        long sprintId = sprintDaoService.getSprintIdFromName(sprint);
         if (newFilter) {
-            workItemList.addAll(workItems.stream().filter(
-                    workItem -> workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
-                                workItem.getStatusCode() == WorkItemStatus.NEW
-            ).toList());
+//            workItemList.addAll(workItems.stream().filter(
+//                    workItem -> workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
+//                                workItem.getStatusCode() == WorkItemStatus.NEW
+//            ).toList());
+            workItemList.addAll(workItemRepository.findBySprintIdAndStatusCode(sprintId, WorkItemStatus.NEW));
         }
         if (ongoingFilter) {
-            workItemList.addAll(workItems.stream().filter(
-                    workItem -> workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
-                                workItem.getStatusCode() == WorkItemStatus.ONGOING
-            ).toList());
+//            workItemList.addAll(workItems.stream().filter(
+//                    workItem -> workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
+//                                workItem.getStatusCode() == WorkItemStatus.ONGOING
+//            ).toList());
+            workItemList.addAll(workItemRepository.findBySprintIdAndStatusCode(sprintId, WorkItemStatus.ONGOING));
         }
         if (completedFilter) {
-            workItemList.addAll(workItems.stream().filter(
-                    workItem -> workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
-                                workItem.getStatusCode() == WorkItemStatus.COMPLETED
-            ).toList());
+//            workItemList.addAll(workItems.stream().filter(
+//                    workItem -> workItem.getSprintId() == sprintDaoService.getSprintIdFromName(sprint) &&
+//                                workItem.getStatusCode() == WorkItemStatus.COMPLETED
+//            ).toList());
+            workItemList.addAll(workItemRepository.findBySprintIdAndStatusCode(sprintId, WorkItemStatus.COMPLETED));
         }
         return workItemList;
     }
 
-    public WorkItem getWorkItemForId(int workItemId){
-        return workItems.stream().filter(workItem -> workItem.getWorkItemId()==workItemId).findAny().get();
+    public WorkItem getWorkItemForId(long workItemId){
+        return workItemRepository.findByWorkItemId(workItemId);
+//        return workItems.stream().filter(workItem -> workItem.getWorkItemId()==workItemId).findAny().get();
     }
 
-    public void deleteWorkItem(int workItemId) {
-        workItems.removeIf(workItem -> workItem.getWorkItemId() == workItemId);
+    public void deleteWorkItem(long workItemId) {
+        workItemRepository.deleteByWorkItemId(workItemId);
+//        workItems.removeIf(workItem -> workItem.getWorkItemId() == workItemId);
     }
 
-    public void updateWorkItem(int workItemId, String newStatus) {
-        WorkItem workItemToUpdate = workItems.stream()
-                .filter(workItem -> workItem.getWorkItemId() == workItemId)
-                .findAny().get();
+    public void updateWorkItem(long workItemId, String newStatus) {
+//        WorkItem workItemToUpdate = workItems.stream()
+//                .filter(workItem -> workItem.getWorkItemId() == workItemId)
+//                .findAny().get();
+        WorkItem workItemToUpdate = workItemRepository.findByWorkItemId(workItemId);
         deleteWorkItem(workItemId);
         workItemToUpdate.setStatus(newStatus.toUpperCase());
         workItemToUpdate.setStatusCode(workItemStatus.getStatusCode(newStatus));
@@ -144,9 +158,10 @@ public class WorkItemDaoService {
     }
 
     public void updateWorkItem(int workItemId, WorkItem workItemPatch) {
-        WorkItem workItemToUpdate = workItems.stream()
-                .filter(workItem -> workItem.getWorkItemId().equals(workItemId))
-                .findAny().get();
+//        WorkItem workItemToUpdate = workItems.stream()
+//                .filter(workItem -> workItem.getWorkItemId().equals(workItemId))
+//                .findAny().get();
+        WorkItem workItemToUpdate = workItemRepository.findByWorkItemId(workItemId);
         workItemPatch.setWorkItemId(workItemToUpdate.getWorkItemId());
         workItemPatch.setSprintId(sprintDaoService.getSprintIdFromName(workItemPatch.getSprint()));
         workItemPatch.setStatusCode(workItemStatus.getStatusCode(workItemPatch.getStatus()));
@@ -159,31 +174,38 @@ public class WorkItemDaoService {
         addWorkItem(workItemPatch, false);
     }
 
-    public void updateWorkItemSprintName(int workItemId, String newSprintName) {
-        WorkItem workItemToUpdate = workItems.stream()
-                .filter(workItem -> workItem.getWorkItemId() == workItemId)
-                .findAny().get();
+    public void updateWorkItemSprintName(long workItemId, String newSprintName) {
+//        WorkItem workItemToUpdate = workItems.stream()
+//                .filter(workItem -> workItem.getWorkItemId() == workItemId)
+//                .findAny().get();
+        WorkItem workItemToUpdate = workItemRepository.findByWorkItemId(workItemId);
         deleteWorkItem(workItemId);
         workItemToUpdate.setSprint(newSprintName);
         addWorkItem(workItemToUpdate, false);
     }
 
     public long countWorkItems(String userName, int sprintId, String status){
-        return workItems.stream().
-                filter(
-                        workItem ->
-                                workItem.getAssigneeId()== userDaoService.getUserIdFromName(userName) &&
-                                workItem.getSprintId()==sprintId &&
-                                workItem.getStatusCode()==workItemStatus.getStatusCode(status)
-                ).count();
+        long assigneeId = userDaoService.getUserIdFromName(userName);
+        int statusCode = workItemStatus.getStatusCode(status);
+        return workItemRepository.countByAssigneeIdAndSprintIdAndStatusCode(assigneeId, sprintId, statusCode);
+//        return workItems.stream().
+//                filter(
+//                        workItem ->
+//                                workItem.getAssigneeId()== userDaoService.getUserIdFromName(userName) &&
+//                                workItem.getSprintId()==sprintId &&
+//                                workItem.getStatusCode()==workItemStatus.getStatusCode(status)
+//                ).count();
     }
 
     public long countWorkItems(String userName, String status){
-        return workItems.stream()
-                .filter(
-                        workItem ->
-                                workItem.getAssigneeId()== userDaoService.getUserIdFromName(userName) &&
-                                workItem.getStatusCode()==workItemStatus.getStatusCode(status)
-                ).count();
+        long assigneeId = userDaoService.getUserIdFromName(userName);
+        int statusCode = workItemStatus.getStatusCode(status);
+        return workItemRepository.countByAssigneeIdAndStatusCode(assigneeId, statusCode);
+//        return workItems.stream()
+//                .filter(
+//                        workItem ->
+//                                workItem.getAssigneeId()== userDaoService.getUserIdFromName(userName) &&
+//                                workItem.getStatusCode()==workItemStatus.getStatusCode(status)
+//                ).count();
     }
 }

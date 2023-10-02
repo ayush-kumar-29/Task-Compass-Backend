@@ -10,77 +10,85 @@ import java.util.List;
 
 @Service
 public class SprintDaoService {
-    private List<Sprint> sprints;
-    private int sprintCount;
+//    private List<Sprint> sprints;
+//    private int sprintCount;
 
     @Autowired
     SprintStatus sprintStatus;
 
-    @PostConstruct
-    public void init() {
-        sprintCount=2001;
-        sprints=new ArrayList<>();
-        sprints.add(new Sprint(getSprintCount(), "Sprint-1",
-                LocalDate.now().plusMonths(1), LocalDate.now().plusMonths(2), "UPCOMING",
-                SprintStatus.UPCOMING));
-        sprints.add(new Sprint(getSprintCount(), "Sprint-2",
-                LocalDate.now().plusMonths(2), LocalDate.now().plusMonths(3), "ONGOING",
-                SprintStatus.ONGOING));
-        sprints.add(new Sprint(getSprintCount(), "Sprint-3",
-                LocalDate.now().plusMonths(4), LocalDate.now().plusMonths(4), "CLOSED",
-                SprintStatus.CLOSED));
-    }
+    @Autowired
+    private SprintRepository sprintRepository;
 
-    private int getSprintCount(){
-        return sprintCount++;
-    }
+//    @PostConstruct
+//    public void init() {
+//        sprintCount=2001;
+//        sprints=new ArrayList<>();
+//        sprints.add(new Sprint(getSprintCount(), "Sprint-1",
+//                LocalDate.now().plusMonths(1), LocalDate.now().plusMonths(2), "UPCOMING",
+//                SprintStatus.UPCOMING));
+//        sprints.add(new Sprint(getSprintCount(), "Sprint-2",
+//                LocalDate.now().plusMonths(2), LocalDate.now().plusMonths(3), "ONGOING",
+//                SprintStatus.ONGOING));
+//        sprints.add(new Sprint(getSprintCount(), "Sprint-3",
+//                LocalDate.now().plusMonths(4), LocalDate.now().plusMonths(4), "CLOSED",
+//                SprintStatus.CLOSED));
+//    }
 
-    public List<Sprint> getSprints(){
-        return sprints;
+//    private int getSprintCount(){
+//        return sprintCount++;
+//    }
+
+    public Sprint getSprintById(Long sprintId){
+        return sprintRepository.findBySprintId(sprintId);
     }
 
     public List<String> getSprintNames(){
-        List<String> sprintNames=new ArrayList<>();
-        for(Sprint sprint:sprints)
-            sprintNames.add(sprint.getSprintName());
-        return sprintNames;
+        return sprintRepository.findDistinctSprintName();
+//        List<String> sprintNames=new ArrayList<>();
+//        for(Sprint sprint:sprints)
+//            sprintNames.add(sprint.getSprintName());
+//        return sprintNames;
     }
 
     public void addSprint(Sprint newSprint, boolean isNewSprint){
-        System.out.println(newSprint);
         if(isNewSprint){
-            newSprint.setSprintId(getSprintCount());
+//            newSprint.setSprintId(getSprintCount());
             newSprint.setStatus("UPCOMING");
             newSprint.setStatusCode(SprintStatus.UPCOMING);
         }
-        sprints.add(newSprint);
+//        sprints.add(newSprint);
+        sprintRepository.save(newSprint);
     }
 
     public List<Sprint> getSprintListForFilter(boolean upcomingFilter, boolean ongoingFilter, boolean closedFilter){
         List<Sprint> sprintList = new ArrayList<>();
         if(upcomingFilter){
-            sprintList.addAll(
-                    sprints.stream()
-                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.UPCOMING).toList()
-            );
+//            sprintList.addAll(
+//                    sprints.stream()
+//                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.UPCOMING).toList()
+//            );
+            sprintList.addAll(sprintRepository.findByStatusCode(SprintStatus.UPCOMING));
         }
         if(ongoingFilter){
-            sprintList.addAll(
-                    sprints.stream()
-                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.ONGOING).toList()
-            );
+//            sprintList.addAll(
+//                    sprints.stream()
+//                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.ONGOING).toList()
+//            );
+            sprintList.addAll(sprintRepository.findByStatusCode(SprintStatus.ONGOING));
         }
         if(closedFilter){
-            sprintList.addAll(
-                    sprints.stream()
-                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.CLOSED).toList()
-            );
+//            sprintList.addAll(
+//                    sprints.stream()
+//                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.CLOSED).toList()
+//            );
+            sprintList.addAll(sprintRepository.findByStatusCode(SprintStatus.CLOSED));
         }
         return sprintList;
     }
 
-    public Sprint getSprintForId(int sprintId){
-        return sprints.stream().filter(sprint -> sprint.getSprintId()==sprintId).findAny().get();
+    public Sprint getSprintForId(long sprintId){
+        return sprintRepository.findBySprintId(sprintId);
+//        return sprints.stream().filter(sprint -> sprint.getSprintId()==sprintId).findAny().get();
     }
 
     public void updateSprintStatus(Sprint sprint, String newStatus){
@@ -111,17 +119,24 @@ public class SprintDaoService {
 //        addSprint(sprintPatch, false);
 //    }
 
-    public int getSprintIdFromName(String sprintName){
-        return sprints.stream().filter(sprint -> sprint.getSprintName().equals(sprintName))
-                .findAny().get().getSprintId();
+    public long getSprintIdFromName(String sprintName){
+        return sprintRepository.findSprintIdBySprintName(sprintName);
+//        return sprints.stream().filter(sprint -> sprint.getSprintName().equals(sprintName))
+//                .findAny().get().getSprintId();
     }
 
     public boolean sprintNameExists(String sprintName){
-        boolean exists=false;
-        for(Sprint sprint: sprints){
-            if(sprint.getSprintName().equalsIgnoreCase(sprintName))
-                return true;
-        }
-        return exists;
+        Long sprintId = sprintRepository.findSprintIdBySprintName(sprintName);
+        return sprintId!=null;
+//        boolean exists=false;
+//        for(Sprint sprint: sprints){
+//            if(sprint.getSprintName().equalsIgnoreCase(sprintName))
+//                return true;
+//        }
+//        return exists;
+    }
+
+    public void deleteSprintById(long sprintId) {
+        sprintRepository.deleteBySprintId(sprintId);
     }
 }

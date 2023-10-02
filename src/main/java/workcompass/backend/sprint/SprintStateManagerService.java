@@ -13,9 +13,8 @@ public class SprintStateManagerService{
     @Autowired
     WorkItemDaoService workItemDaoService;
 
-    private void configureSprintStateObserver(int sprintId, boolean attachCompleted){
-        Sprint sprintToConfigure = sprintDaoService.getSprints().stream()
-                .filter(sprint -> sprint.getSprintId() == sprintId).findAny().get();
+    private void configureSprintStateObserver(long sprintId, boolean attachCompleted){
+        Sprint sprintToConfigure = sprintDaoService.getSprintById(sprintId);
         sprintStatePublisher.attachWorkItems(
                 workItemDaoService.getTasksForFilters(sprintToConfigure.getSprintName(),
                         true, true, false)
@@ -27,17 +26,16 @@ public class SprintStateManagerService{
             );
     }
 
-    public void deleteSprint(int sprintId, boolean deleteWorksItems) {
+    public void deleteSprint(long sprintId, boolean deleteWorksItems) {
         if(deleteWorksItems) {
             configureSprintStateObserver(sprintId, true);
             sprintStatePublisher.deleteWorkItems();
         }
-        sprintDaoService.getSprints().removeIf(sprint -> sprint.getSprintId().equals(sprintId));
+        sprintDaoService.deleteSprintById(sprintId);//getSprints().removeIf(sprint -> sprint.getSprintId().equals(sprintId));
     }
 
-    public void updateSprint(int sprintId, String newStatus){
-        Sprint sprintToClose=sprintDaoService.getSprints().stream().filter(sprint -> sprint.getSprintId().equals(sprintId))
-                .findAny().get();
+    public void updateSprint(long sprintId, String newStatus){
+        Sprint sprintToClose=sprintDaoService.getSprintById(sprintId);
         configureSprintStateObserver(sprintId, false);
         sprintStatePublisher.updateWorkItemStatus();
         deleteSprint(sprintId, false);
@@ -45,11 +43,9 @@ public class SprintStateManagerService{
         sprintDaoService.addSprint(sprintToClose, false);
     }
 
-    public void updateSprint(int sprintId, Sprint sprintPatch){
+    public void updateSprint(long sprintId, Sprint sprintPatch){
         // todo: handle concurrency
-        Sprint sprintToUpdate=sprintDaoService.getSprints().stream()
-                .filter(sprint -> sprint.getSprintId().equals(sprintId))
-                .findAny().get();
+        Sprint sprintToUpdate=sprintDaoService.getSprintById(sprintId);
         if(sprintToUpdate.getSprintName().equals(sprintPatch.getSprintName())){
             configureSprintStateObserver(sprintId, true);
             sprintStatePublisher.updateWorkItemSprintName(sprintPatch.getSprintName());

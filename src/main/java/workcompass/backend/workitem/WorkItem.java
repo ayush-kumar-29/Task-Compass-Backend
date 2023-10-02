@@ -1,28 +1,37 @@
 package workcompass.backend.workitem;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "work_items_table")
 public class WorkItem {
-    private Integer workItemId;
+    @Id
+    @GeneratedValue
+    private Long workItemId;
     private String workItemTitle;
     private String workItemDescription;
     private String sprint;
-    private Integer sprintId;
+    private Long sprintId;
     private LocalDate dueDate;
     private String status;
     private Integer statusCode;
     private String priority;
     private Integer priorityCode;
     private String assigneeName;
-    private Integer assigneeId;
+    private Long assigneeId;
     private String creatorName;
-    private Integer creatorId;
+    private Long creatorId;
     private LocalDate creationDate;
 
-    public WorkItem(Integer workItemId, String workItemTitle, String workItemDescription, String sprint,
-                    Integer sprintId, LocalDate dueDate, String status, Integer statusCode,
-                    String priority, Integer priorityCode, String assigneeName, Integer assigneeId,
-                    String creatorName, Integer creatorId, LocalDate creationDate) {
+    public WorkItem(Long workItemId, String workItemTitle, String workItemDescription, String sprint,
+                    Long sprintId, LocalDate dueDate, String status, Integer statusCode,
+                    String priority, Integer priorityCode, String assigneeName, Long assigneeId,
+                    String creatorName, Long creatorId, LocalDate creationDate) {
         this.workItemId = workItemId;
         this.workItemTitle = workItemTitle;
         this.workItemDescription = workItemDescription;
@@ -40,11 +49,11 @@ public class WorkItem {
         this.creationDate = creationDate;
     }
 
-    public Integer getWorkItemId() {
+    public Long getWorkItemId() {
         return workItemId;
     }
 
-    public void setWorkItemId(Integer workItemId) {
+    public void setWorkItemId(Long workItemId) {
         this.workItemId = workItemId;
     }
 
@@ -72,11 +81,11 @@ public class WorkItem {
         this.sprint = sprint;
     }
 
-    public Integer getSprintId() {
+    public Long getSprintId() {
         return sprintId;
     }
 
-    public void setSprintId(Integer sprintId) {
+    public void setSprintId(Long sprintId) {
         this.sprintId = sprintId;
     }
 
@@ -128,11 +137,11 @@ public class WorkItem {
         this.assigneeName = assigneeName;
     }
 
-    public Integer getAssigneeId() {
+    public Long getAssigneeId() {
         return assigneeId;
     }
 
-    public void setAssigneeId(Integer assigneeId) {
+    public void setAssigneeId(Long assigneeId) {
         this.assigneeId = assigneeId;
     }
 
@@ -144,11 +153,11 @@ public class WorkItem {
         this.creatorName = creatorName;
     }
 
-    public Integer getCreatorId() {
+    public Long getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Integer creatorId) {
+    public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
     }
 

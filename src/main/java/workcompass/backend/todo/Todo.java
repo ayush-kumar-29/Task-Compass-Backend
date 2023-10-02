@@ -1,37 +1,58 @@
 package workcompass.backend.todo;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "todos_table")
 public class Todo {
-    private Integer todoId;
-    private Integer userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String todoId;
+    private Long userId;
     private String todoDescription;
     private LocalDate dueDate;
     private Boolean isDone;
     private LocalDate completionDate;
+    private Boolean isDeleted;
 
-    public Todo(Integer todoId, Integer userId, String todoDescription, LocalDate dueDate, Boolean isDone, LocalDate completionDate) {
+    public Todo() {}
+
+    public Todo(Long id, String todoId, Long userId, String todoDescription, LocalDate dueDate,
+                Boolean isDone, LocalDate completionDate, Boolean isDeleted) {
+        this.id=id;
         this.todoId = todoId;
         this.userId = userId;
         this.todoDescription = todoDescription;
         this.dueDate = dueDate;
         this.isDone = isDone;
         this.completionDate = completionDate;
+        this.isDeleted = isDeleted;
     }
 
-    public Integer getTodoId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTodoId() {
         return todoId;
     }
 
-    public void setTodoId(Integer todoId) {
+    public void setTodoId(String todoId) {
         this.todoId = todoId;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -67,15 +88,25 @@ public class Todo {
         this.completionDate = completionDate;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Todo{" +
-                "todoId=" + todoId +
+                "id=" + id +
+                ", todoId='" + todoId + '\'' +
                 ", userId=" + userId +
                 ", todoDescription='" + todoDescription + '\'' +
                 ", dueDate=" + dueDate +
                 ", isDone=" + isDone +
                 ", completionDate=" + completionDate +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

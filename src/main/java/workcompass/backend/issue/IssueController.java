@@ -17,7 +17,7 @@ public class IssueController {
     }
 
     @GetMapping(value = "/issues/{issueId}")
-    public Issue getIssue(@PathVariable int issueId){
+    public Issue getIssue(@PathVariable String issueId){
         return issueDaoService.getIssueForId(issueId);
     }
 
@@ -33,13 +33,13 @@ public class IssueController {
     }
 
     @DeleteMapping(value = "/issues/deleteIssue/{issueId}")
-    public void deleteIssue(@PathVariable int issueId){
+    public void deleteIssue(@PathVariable String issueId){
         issueDaoService.deleteIssue(issueId);
     }
 
     @PatchMapping(value="/issues/editIssue/{issueId}")
     public void updateIssue(@RequestParam String updateType, @RequestParam String newStatus,
-                            @PathVariable int issueId, @RequestBody Issue issuePatch){
+                            @PathVariable String issueId, @RequestBody Issue issuePatch){
         if(updateType.equalsIgnoreCase("status"))
             issueDaoService.updateIssue(issueId, newStatus);
         else if(updateType.equalsIgnoreCase("content"))

@@ -1,9 +1,17 @@
 package workcompass.backend.issue;
 
+import jakarta.persistence.*;
+
+import javax.annotation.processing.Generated;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "issues_table")
 public class Issue {
-    private Integer issueId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String issueId;
     private String issueTitle;
     private String issueDescription;
     private LocalDate dueDate;
@@ -12,15 +20,20 @@ public class Issue {
     private Integer severityCode;
     private String severity;
     private String assigneeName;
-    private Integer assigneeId;
+    private Long assigneeId;
     private String creatorName;
-    private Integer creatorId;
+    private Long creatorId;
     private LocalDate creationDate;
+    private Boolean isDeleted;
 
-    public Issue(Integer issueId, String issueTitle, String issueDescription, LocalDate dueDate,
+    public Issue() {
+    }
+
+    public Issue(Long id, String issueId, String issueTitle, String issueDescription, LocalDate dueDate,
                  String status, Integer statusCode, String severity, Integer severityCode,
-                 String assigneeName, Integer assigneeId, String creatorName, Integer creatorId,
+                 String assigneeName, Long assigneeId, String creatorName, Long creatorId,
                  LocalDate creationDate) {
+        this.id=id;
         this.issueId = issueId;
         this.issueTitle = issueTitle;
         this.issueDescription = issueDescription;
@@ -36,11 +49,19 @@ public class Issue {
         this.creationDate = creationDate;
     }
 
-    public Integer getIssueId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getIssueId() {
         return issueId;
     }
 
-    public void setIssueId(Integer issueId) {
+    public void setIssueId(String issueId) {
         this.issueId = issueId;
     }
 
@@ -100,11 +121,11 @@ public class Issue {
         this.severity = severity;
     }
 
-    public Integer getAssigneeId() {
+    public Long getAssigneeId() {
         return assigneeId;
     }
 
-    public void setAssigneeId(Integer assigneeId) {
+    public void setAssigneeId(Long assigneeId) {
         this.assigneeId = assigneeId;
     }
 
@@ -116,11 +137,11 @@ public class Issue {
         this.assigneeName = assigneeName;
     }
 
-    public Integer getCreatorId() {
+    public Long getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Integer creatorId) {
+    public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
     }
 
@@ -140,10 +161,19 @@ public class Issue {
         this.creationDate = creationDate;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Issue{" +
-                "issueId=" + issueId +
+                "id=" + id +
+                ", issueId='" + issueId + '\'' +
                 ", issueTitle='" + issueTitle + '\'' +
                 ", issueDescription='" + issueDescription + '\'' +
                 ", dueDate=" + dueDate +
@@ -151,11 +181,12 @@ public class Issue {
                 ", status='" + status + '\'' +
                 ", severityCode=" + severityCode +
                 ", severity='" + severity + '\'' +
-                ", assigneeId=" + assigneeId +
                 ", assigneeName='" + assigneeName + '\'' +
-                ", creatorId=" + creatorId +
+                ", assigneeId=" + assigneeId +
                 ", creatorName='" + creatorName + '\'' +
+                ", creatorId=" + creatorId +
                 ", creationDate=" + creationDate +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

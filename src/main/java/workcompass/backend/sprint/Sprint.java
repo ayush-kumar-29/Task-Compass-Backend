@@ -1,16 +1,25 @@
 package workcompass.backend.sprint;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "sprints_table")
 public class Sprint {
-    private Integer sprintId;
+    @Id
+    @GeneratedValue
+    private Long sprintId;
     private String sprintName;
     private LocalDate sprintStartDate;
     private LocalDate sprintEndDate;
     private String status;
     private Integer statusCode;
 
-    public Sprint(Integer sprintId, String sprintName, LocalDate sprintStartDate,
+    public Sprint(Long sprintId, String sprintName, LocalDate sprintStartDate,
                   LocalDate sprintEndDate, String status, Integer statusCode) {
         this.sprintId = sprintId;
         this.sprintName = sprintName;
@@ -20,11 +29,11 @@ public class Sprint {
         this.statusCode = statusCode;
     }
 
-    public Integer getSprintId() {
+    public Long getSprintId() {
         return sprintId;
     }
 
-    public void setSprintId(Integer sprintId) {
+    public void setSprintId(Long sprintId) {
         this.sprintId = sprintId;
     }
 

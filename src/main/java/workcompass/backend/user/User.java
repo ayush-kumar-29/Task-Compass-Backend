@@ -1,25 +1,43 @@
 package workcompass.backend.user;
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class User {
-    private Integer userId;
+import java.util.Collection;
+import java.util.List;
+
+
+@Entity
+@Table(name = "newUser")
+public class User implements UserDetails {
+    @Id
+    @GeneratedValue
+    private Long userId;
     private String userName;
     private String emailId;
-    private String passwordSalt;
-    private String hashedPassword;
+    private String password;
 
-    public User(Integer userId, String userName, String emailId, String passwordSalt, String hashedPassword) {
+    public User() {}
+
+    public User(String userName, String emailId, String password) {
+        this.userName = userName;
+        this.emailId = emailId;
+        this.password = password;
+    }
+
+    public User(Long userId, String userName, String emailId, String password) {
         this.userId = userId;
         this.userName = userName;
         this.emailId = emailId;
-        this.passwordSalt = passwordSalt;
-        this.hashedPassword = hashedPassword;
+        this.password = password;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -39,20 +57,42 @@ public class User {
         this.emailId = emailId;
     }
 
-    public String getPasswordSalt() {
-        return passwordSalt;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setPasswordSalt(String passwordSalt) {
-        this.passwordSalt = passwordSalt;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
@@ -61,8 +101,7 @@ public class User {
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", emailId='" + emailId + '\'' +
-                ", passwordSalt='" + passwordSalt + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

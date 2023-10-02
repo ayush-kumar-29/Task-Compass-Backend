@@ -26,7 +26,12 @@ public class TodoController {
 
     @GetMapping(value = "/ping")
     public String ping(){
-        return "API is working fine!";
+        return "API is working fineeeeeeeeeeeeeeeeeeeeeeeee!";
+    }
+
+    @PostMapping(value = "/ping1")
+    public String pinggg(){
+        return "API is working finaaaaaaaaaaaaaaaaaaaa!";
     }
 
     @GetMapping(value = "/todos")
@@ -36,7 +41,7 @@ public class TodoController {
     }
 
     @GetMapping(value = "/todos/{todoId}")
-    public Todo getTodo(@RequestParam String userName, @PathVariable int todoId){
+    public Todo getTodo(@RequestParam String userName, @PathVariable String todoId){
         return todoDaoService.getTodoForId(userName, todoId);
     }
 
@@ -52,13 +57,13 @@ public class TodoController {
     }
 
     @DeleteMapping(value = "todos/deleteTodo/{todoId}")
-    public void deleteTodo(@RequestParam String userName, @PathVariable int todoId){
+    public void deleteTodo(@RequestParam String userName, @PathVariable String todoId){
         todoDaoService.deleteTodo(userName, todoId);
     }
 
     @PatchMapping(value = "todos/updateTodo/{todoId}")
     public void updateTodo(@RequestParam String userName, @RequestParam String updateType,
-                                 @PathVariable int todoId, @RequestBody Todo todoPatch){
+                                 @PathVariable String todoId, @RequestBody Todo todoPatch){
         if(updateType.equals("status"))
             todoDaoService.updateTodo(userName, todoId);
         else if(updateType.equals("content"))
