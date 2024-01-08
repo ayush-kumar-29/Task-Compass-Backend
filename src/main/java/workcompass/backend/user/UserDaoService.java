@@ -38,7 +38,7 @@ public class UserDaoService {
 //        return userNames;
     }
 
-    public long getUserIdFromName(String userName){
+    public String getUserIdFromName(String userName){
         return userRepository.findUserIdByUserName(userName);
     }
 
@@ -50,5 +50,17 @@ public class UserDaoService {
 //                return true;
 //        }
 //        return false;
+    }
+
+    public void addNewUser(User newUser){
+        userRepository.save(newUser);
+    }
+
+    public String getUniqueUserId(){
+        return "U-"+(userRepository.getRowCount()+1);
+    }
+
+    public User createNewUser(String userName, String password, String email){
+        return new User(getUniqueUserId(), userName, email, password);
     }
 }

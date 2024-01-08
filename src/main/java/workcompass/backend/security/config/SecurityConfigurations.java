@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import workcompass.backend.security.AuthTokenValidationFilter;
 import workcompass.backend.user.UserRepository;
 
@@ -54,6 +55,15 @@ public class SecurityConfigurations {
                                 revokedTokensCache.put(token, true);
                                 response.setStatus(HttpServletResponse.SC_OK);
                             });
+                })
+                .cors(cors -> {
+                    cors.configurationSource(request -> {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.addAllowedOrigin("http://localhost:3000");
+                        config.addAllowedMethod("*");
+                        config.addAllowedHeader("*");
+                        return config;
+                    });
                 })
                 .build();
     }

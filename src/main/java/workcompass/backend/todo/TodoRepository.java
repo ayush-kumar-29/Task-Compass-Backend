@@ -9,12 +9,12 @@ import java.util.List;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    List<Todo> findByUserIdAndIsDoneAndIsDeleted(Long userId, boolean isDone,
+    List<Todo> findByUserIdAndIsDoneAndIsDeleted(String userId, boolean isDone,
                                                  boolean isDeleted);
-    Todo findByUserIdAndTodoId(Long userId, String todoId);
+    Todo findByUserIdAndTodoId(String userId, String todoId);
 //    @Query("DELETE FROM Todo t WHERE t.userId=:userId AND  t.todoId=:todoId")
 //    void deleteByUserIdAndTodoId(@Param("userId") Long userId, @Param("todoId")String todoId);
-    Long countByUserIdAndIsDoneAndIsDeleted(Long userId, boolean isDone, boolean isDeleted);
+    Long countByUserIdAndIsDoneAndIsDeleted(String userId, boolean isDone, boolean isDeleted);
     @Query("SELECT COUNT(*) FROM Todo")
     Long getRowCount();
 }

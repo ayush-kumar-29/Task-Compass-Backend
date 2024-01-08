@@ -11,7 +11,9 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserName(String userName);
     @Query("SELECT u.userId FROM User u WHERE u.userName = :userName")
-    Long findUserIdByUserName(@Param("userName") String userName);
+    String findUserIdByUserName(@Param("userName") String userName);
     @Query("SELECT DISTINCT u.userName FROM User u")
     List<String> findDistinctUserName();
+    @Query("SELECT COUNT(*) FROM User")
+    Long getRowCount();
 }

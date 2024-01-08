@@ -1,9 +1,6 @@
 package workcompass.backend.workitem;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -11,27 +8,33 @@ import java.time.LocalDate;
 @Table(name = "work_items_table")
 public class WorkItem {
     @Id
-    @GeneratedValue
-    private Long workItemId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String workItemId;
     private String workItemTitle;
     private String workItemDescription;
     private String sprint;
-    private Long sprintId;
+    private String sprintId;
     private LocalDate dueDate;
     private String status;
     private Integer statusCode;
     private String priority;
     private Integer priorityCode;
     private String assigneeName;
-    private Long assigneeId;
+    private String assigneeId;
     private String creatorName;
-    private Long creatorId;
+    private String creatorId;
     private LocalDate creationDate;
+    private Boolean isDeleted;
 
-    public WorkItem(Long workItemId, String workItemTitle, String workItemDescription, String sprint,
-                    Long sprintId, LocalDate dueDate, String status, Integer statusCode,
-                    String priority, Integer priorityCode, String assigneeName, Long assigneeId,
-                    String creatorName, Long creatorId, LocalDate creationDate) {
+    public WorkItem() {
+    }
+
+    public WorkItem(Long id, String workItemId, String workItemTitle, String workItemDescription, String sprint,
+                    String sprintId, LocalDate dueDate, String status, Integer statusCode,
+                    String priority, Integer priorityCode, String assigneeName, String assigneeId,
+                    String creatorName, String creatorId, LocalDate creationDate, Boolean isDeleted) {
+        this.id=id;
         this.workItemId = workItemId;
         this.workItemTitle = workItemTitle;
         this.workItemDescription = workItemDescription;
@@ -47,13 +50,22 @@ public class WorkItem {
         this.creatorName = creatorName;
         this.creatorId = creatorId;
         this.creationDate = creationDate;
+        this.isDeleted=isDeleted;
     }
 
-    public Long getWorkItemId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getWorkItemId() {
         return workItemId;
     }
 
-    public void setWorkItemId(Long workItemId) {
+    public void setWorkItemId(String workItemId) {
         this.workItemId = workItemId;
     }
 
@@ -81,11 +93,11 @@ public class WorkItem {
         this.sprint = sprint;
     }
 
-    public Long getSprintId() {
+    public String getSprintId() {
         return sprintId;
     }
 
-    public void setSprintId(Long sprintId) {
+    public void setSprintId(String sprintId) {
         this.sprintId = sprintId;
     }
 
@@ -137,11 +149,11 @@ public class WorkItem {
         this.assigneeName = assigneeName;
     }
 
-    public Long getAssigneeId() {
+    public String getAssigneeId() {
         return assigneeId;
     }
 
-    public void setAssigneeId(Long assigneeId) {
+    public void setAssigneeId(String assigneeId) {
         this.assigneeId = assigneeId;
     }
 
@@ -153,11 +165,11 @@ public class WorkItem {
         this.creatorName = creatorName;
     }
 
-    public Long getCreatorId() {
+    public String getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Long creatorId) {
+    public void setCreatorId(String creatorId) {
         this.creatorId = creatorId;
     }
 
@@ -169,24 +181,34 @@ public class WorkItem {
         this.creationDate = creationDate;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "WorkItem{" +
-                "taskId=" + workItemId +
-                ", taskTitle='" + workItemTitle + '\'' +
-                ", taskDescription='" + workItemDescription + '\'' +
+                "id=" + id +
+                ", workItemId='" + workItemId + '\'' +
+                ", workItemTitle='" + workItemTitle + '\'' +
+                ", workItemDescription='" + workItemDescription + '\'' +
                 ", sprint='" + sprint + '\'' +
-                ", sprintId=" + sprintId +
+                ", sprintId='" + sprintId + '\'' +
                 ", dueDate=" + dueDate +
                 ", status='" + status + '\'' +
                 ", statusCode=" + statusCode +
                 ", priority='" + priority + '\'' +
                 ", priorityCode=" + priorityCode +
                 ", assigneeName='" + assigneeName + '\'' +
-                ", assigneeId=" + assigneeId +
+                ", assigneeId='" + assigneeId + '\'' +
                 ", creatorName='" + creatorName + '\'' +
-                ", creatorId=" + creatorId +
+                ", creatorId='" + creatorId + '\'' +
                 ", creationDate=" + creationDate +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

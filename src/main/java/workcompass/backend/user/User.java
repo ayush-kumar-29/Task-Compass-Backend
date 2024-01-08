@@ -9,35 +9,38 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "newUser")
+@Table(name = "users_table")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
-    private Long userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String userId;
     private String userName;
     private String emailId;
     private String password;
 
     public User() {}
 
-    public User(String userName, String emailId, String password) {
-        this.userName = userName;
-        this.emailId = emailId;
-        this.password = password;
-    }
-
-    public User(Long userId, String userName, String emailId, String password) {
+    public User(String userId, String userName, String emailId, String password) {
         this.userId = userId;
         this.userName = userName;
         this.emailId = emailId;
         this.password = password;
     }
 
-    public Long getUserId() {
+    public User(Long id, String userId, String userName, String emailId, String password) {
+        this.id=id;
+        this.userId = userId;
+        this.userName = userName;
+        this.emailId = emailId;
+        this.password = password;
+    }
+
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -98,7 +101,8 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +

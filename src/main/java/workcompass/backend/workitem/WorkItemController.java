@@ -19,7 +19,7 @@ public class WorkItemController {
     }
 
     @GetMapping(value = "/workItems/{workItemId}")
-    public WorkItem getWorkItemForId(@PathVariable int workItemId){
+    public WorkItem getWorkItemForId(@PathVariable String workItemId){
         return workItemDaoService.getWorkItemForId(workItemId);
     }
 
@@ -29,13 +29,13 @@ public class WorkItemController {
     }
 
     @DeleteMapping(value = "/workItems/deleteWorkItem/{workItemId}")
-    public void deleteWorkItem(@PathVariable int workItemId){
+    public void deleteWorkItem(@PathVariable String workItemId){
         workItemDaoService.deleteWorkItem(workItemId);
     }
 
     @PatchMapping(value = "/workItems/editWorkItem/{workItemId}")
     public void updateSprint(@RequestParam String updateType, @RequestParam String newStatus,
-                             @PathVariable int workItemId, @RequestBody WorkItem workItemPatch){
+                             @PathVariable String workItemId, @RequestBody WorkItem workItemPatch){
         // todo: have a put request for content update
         if(updateType.equalsIgnoreCase("status"))
             workItemDaoService.updateWorkItem(workItemId, newStatus);
@@ -44,9 +44,9 @@ public class WorkItemController {
     }
 
     @GetMapping(value = "/workItems/countByType")
-    public long countWorkItems(@RequestParam String userName, @RequestParam Integer sprintId,
+    public long countWorkItems(@RequestParam String userName, @RequestParam String sprintId,
                                @RequestParam String status){
-        if(sprintId==-1)
+        if(sprintId.equals("-1"))
             return workItemDaoService.countWorkItems(userName, status);
         return workItemDaoService.countWorkItems(userName, sprintId, status);
     }

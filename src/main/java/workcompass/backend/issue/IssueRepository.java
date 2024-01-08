@@ -7,10 +7,10 @@ import workcompass.backend.todo.Todo;
 import java.util.List;
 
 public interface IssueRepository extends JpaRepository<Issue, Long> {
-    List<Issue> findByAssigneeIdAndStatusCodeAndIsDeleted(Long assigneeId, int statusCode, boolean isDeleted);
+    List<Issue> findByAssigneeIdAndStatusCodeAndIsDeleted(String assigneeId, int statusCode, boolean isDeleted);
     Issue findByIssueId(String issueId);
 //    void deleteByIssueId(long issueId);
-    Long countByAssigneeIdAndStatusCodeAndIsDeleted(Long assigneeId, int statusCode, boolean isDeleted);
+    Long countByAssigneeIdAndStatusCodeAndIsDeleted(String assigneeId, int statusCode, boolean isDeleted);
     @Query("SELECT COUNT(*) FROM Issue")
     Long getRowCount();
 

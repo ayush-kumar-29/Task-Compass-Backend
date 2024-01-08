@@ -20,9 +20,9 @@ public class Issue {
     private Integer severityCode;
     private String severity;
     private String assigneeName;
-    private Long assigneeId;
+    private String assigneeId;
     private String creatorName;
-    private Long creatorId;
+    private String creatorId;
     private LocalDate creationDate;
     private Boolean isDeleted;
 
@@ -31,7 +31,7 @@ public class Issue {
 
     public Issue(Long id, String issueId, String issueTitle, String issueDescription, LocalDate dueDate,
                  String status, Integer statusCode, String severity, Integer severityCode,
-                 String assigneeName, Long assigneeId, String creatorName, Long creatorId,
+                 String assigneeName, String assigneeId, String creatorName, String creatorId,
                  LocalDate creationDate) {
         this.id=id;
         this.issueId = issueId;
@@ -121,11 +121,11 @@ public class Issue {
         this.severity = severity;
     }
 
-    public Long getAssigneeId() {
+    public String getAssigneeId() {
         return assigneeId;
     }
 
-    public void setAssigneeId(Long assigneeId) {
+    public void setAssigneeId(String assigneeId) {
         this.assigneeId = assigneeId;
     }
 
@@ -137,11 +137,11 @@ public class Issue {
         this.assigneeName = assigneeName;
     }
 
-    public Long getCreatorId() {
+    public String getCreatorId() {
         return creatorId;
     }
 
-    public void setCreatorId(Long creatorId) {
+    public void setCreatorId(String creatorId) {
         this.creatorId = creatorId;
     }
 

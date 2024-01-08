@@ -67,7 +67,7 @@ public class IssueDaoService {
             newIssue.setCreatorId(userDaoService.getUserIdFromName(newIssue.getCreatorName()));
             newIssue.setCreationDate(LocalDate.now());
             newIssue.setIsDeleted(false);
-            newIssue.setIssueId(getUniqueTodoId());
+            newIssue.setIssueId(getUniqueIssueId());
         }
 //        issues.add(newIssue);
         issueRepository.save(newIssue);
@@ -75,7 +75,7 @@ public class IssueDaoService {
 
     public List<Issue> getIssuesForFilter(String assignee, boolean newIssue,
                                           boolean inProgress, boolean resolved){
-        long assigneeId = userDaoService.getUserIdFromName(assignee);
+        String assigneeId = userDaoService.getUserIdFromName(assignee);
         List<Issue> issueList = new ArrayList<>();
         if(newIssue){
 //            issueList.addAll(issues.stream().filter(
@@ -145,7 +145,7 @@ public class IssueDaoService {
 
     public long countIssues(String userName, String status){
         int statusCode = issueStatus.getStatusCode(status);
-        long assigneeId = userDaoService.getUserIdFromName(userName);
+        String assigneeId = userDaoService.getUserIdFromName(userName);
         return issueRepository.countByAssigneeIdAndStatusCodeAndIsDeleted(assigneeId, statusCode, false);
 //        return issues.stream()
 //                .filter(
@@ -154,7 +154,7 @@ public class IssueDaoService {
 //                ).count();
     }
 
-    public String getUniqueTodoId(){
+    public String getUniqueIssueId(){
         return "I-"+(issueRepository.getRowCount()+1);
     }
 }

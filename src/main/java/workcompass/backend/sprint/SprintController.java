@@ -19,7 +19,7 @@ public class SprintController {
     }
 
     @GetMapping(value = "/sprints/{sprintId}")
-    public Sprint getSprintForId(@PathVariable int sprintId){
+    public Sprint getSprintForId(@PathVariable String sprintId){
         return sprintDaoService.getSprintForId(sprintId);
     }
 
@@ -39,12 +39,12 @@ public class SprintController {
     }
 
     @DeleteMapping(value = "/sprints/deleteSprint/{sprintId}")
-    public void deleteSprint(@PathVariable int sprintId){
+    public void deleteSprint(@PathVariable String sprintId){
         sprintStateManagerService.deleteSprint(sprintId, true);
     }
 
     @PatchMapping(value = "/sprints/updateSprint/{sprintId}")
-    public void updateSprintStatus(@PathVariable int sprintId, @RequestParam String updateType,
+    public void updateSprintStatus(@PathVariable String sprintId, @RequestParam String updateType,
                                    @RequestParam String newStatus, @RequestBody Sprint sprintPatch){
         if(updateType.equalsIgnoreCase("status"))
             sprintStateManagerService.updateSprint(sprintId, newStatus);

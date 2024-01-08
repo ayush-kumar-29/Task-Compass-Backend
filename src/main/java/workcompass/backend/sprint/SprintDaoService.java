@@ -38,9 +38,9 @@ public class SprintDaoService {
 //        return sprintCount++;
 //    }
 
-    public Sprint getSprintById(Long sprintId){
-        return sprintRepository.findBySprintId(sprintId);
-    }
+//    public Sprint getSprintById(String sprintId){
+//        return sprintRepository.findBySprintId(sprintId);
+//    }
 
     public List<String> getSprintNames(){
         return sprintRepository.findDistinctSprintName();
@@ -52,9 +52,10 @@ public class SprintDaoService {
 
     public void addSprint(Sprint newSprint, boolean isNewSprint){
         if(isNewSprint){
-//            newSprint.setSprintId(getSprintCount());
+            newSprint.setSprintId(getUniqueSprintId());
             newSprint.setStatus("UPCOMING");
             newSprint.setStatusCode(SprintStatus.UPCOMING);
+            newSprint.setIsDeleted(false);
         }
 //        sprints.add(newSprint);
         sprintRepository.save(newSprint);
@@ -67,26 +68,26 @@ public class SprintDaoService {
 //                    sprints.stream()
 //                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.UPCOMING).toList()
 //            );
-            sprintList.addAll(sprintRepository.findByStatusCode(SprintStatus.UPCOMING));
+            sprintList.addAll(sprintRepository.findByStatusCodeAndIsDeleted(SprintStatus.UPCOMING, false));
         }
         if(ongoingFilter){
 //            sprintList.addAll(
 //                    sprints.stream()
 //                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.ONGOING).toList()
 //            );
-            sprintList.addAll(sprintRepository.findByStatusCode(SprintStatus.ONGOING));
+            sprintList.addAll(sprintRepository.findByStatusCodeAndIsDeleted(SprintStatus.ONGOING, false));
         }
         if(closedFilter){
 //            sprintList.addAll(
 //                    sprints.stream()
 //                            .filter(sprint -> sprint.getStatusCode() == SprintStatus.CLOSED).toList()
 //            );
-            sprintList.addAll(sprintRepository.findByStatusCode(SprintStatus.CLOSED));
+            sprintList.addAll(sprintRepository.findByStatusCodeAndIsDeleted(SprintStatus.CLOSED, false));
         }
         return sprintList;
     }
 
-    public Sprint getSprintForId(long sprintId){
+    public Sprint getSprintForId(String sprintId){
         return sprintRepository.findBySprintId(sprintId);
 //        return sprints.stream().filter(sprint -> sprint.getSprintId()==sprintId).findAny().get();
     }
@@ -119,14 +120,14 @@ public class SprintDaoService {
 //        addSprint(sprintPatch, false);
 //    }
 
-    public long getSprintIdFromName(String sprintName){
+    public String getSprintIdFromName(String sprintName){
         return sprintRepository.findSprintIdBySprintName(sprintName);
 //        return sprints.stream().filter(sprint -> sprint.getSprintName().equals(sprintName))
 //                .findAny().get().getSprintId();
     }
 
     public boolean sprintNameExists(String sprintName){
-        Long sprintId = sprintRepository.findSprintIdBySprintName(sprintName);
+        String sprintId = sprintRepository.findSprintIdBySprintName(sprintName);
         return sprintId!=null;
 //        boolean exists=false;
 //        for(Sprint sprint: sprints){
@@ -136,7 +137,14 @@ public class SprintDaoService {
 //        return exists;
     }
 
-    public void deleteSprintById(long sprintId) {
-        sprintRepository.deleteBySprintId(sprintId);
+    public void deleteSprintById(String sprintId) {
+        Sprint sprintToDelete = getSprintForId(sprintId);
+        sprintToDelete.setIsDeleted(true);
+        sprintRepository.save(sprintToDelete);
+//        sprintRepository.deleteBySprintId(sprintId);
+    }
+
+    public String getUniqueSprintId(){
+        return "S-"+(sprintRepository.getRowCount()+1);
     }
 }

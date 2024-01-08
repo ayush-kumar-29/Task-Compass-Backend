@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import workcompass.backend.user.User;
+import workcompass.backend.user.UserDaoService;
 import workcompass.backend.user.UserRepository;
 import org.springframework.security.core.AuthenticationException;
 
@@ -20,7 +21,7 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class AuthenticationService {
     @Autowired
-    private UserRepository userRepository;
+    private UserDaoService userDaoService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -79,16 +80,14 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse registerNewUser(RegisterRequest registerRequest){
-        User existingUser = userRepository.findByUserName(registerRequest.getUserName());
-        if(existingUser!=null)
+        if(userDaoService.validateUserName(registerRequest.getUserName()))
             return new AuthenticationResponse("Username already exists");
-        User newUser =
-                new User(
-                        registerRequest.getUserName(),
-                        registerRequest.getEmailId(),
-                        passwordEncoder.encode(registerRequest.getPassword())
-                );
-        userRepository.save(newUser);
+        User newUser = userDaoService.createNewUser(
+                registerRequest.getUserName(),
+                passwordEncoder.encode(registerRequest.getPassword()),
+                registerRequest.getEmailId()
+        );
+        userDaoService.addNewUser(newUser);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         registerRequest.getUserName(),

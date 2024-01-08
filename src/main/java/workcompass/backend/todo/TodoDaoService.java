@@ -39,7 +39,7 @@ public class TodoDaoService {
 
     public List<Todo> getTodosForFilter(String userName, boolean openFilter,
                                         boolean completedFilter){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
         List<Todo> filteredTodoList = new ArrayList<>();
         if(openFilter)
             filteredTodoList.addAll(todoRepository.findByUserIdAndIsDoneAndIsDeleted(userId, false, false));
@@ -51,14 +51,14 @@ public class TodoDaoService {
     }
 
     public Todo getTodoForId(String userName, String todoId){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
         return todoRepository.findByUserIdAndTodoId(userId, todoId);
 //        todos.stream().filter(todo -> todo.getUserId()==userId && todo.getTodoId()==todoId)
 //                .findAny().get();
     }
 
     public void addTodo(Todo newTodo, String userName){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
         newTodo.setUserId(userId);
         newTodo.setTodoId(getUniqueTodoId());
         newTodo.setIsDone(false);
@@ -72,7 +72,7 @@ public class TodoDaoService {
     }
 
     public void deleteTodo(String userName, String todoId){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
         Todo todoToDelete = todoRepository.findByUserIdAndTodoId(userId, todoId);
         todoToDelete.setIsDeleted(true);
         todoRepository.save(todoToDelete);
@@ -80,17 +80,17 @@ public class TodoDaoService {
 //        todos.removeIf(todo->(todo.getUserId()==userId && todo.getTodoId()==todoId));
     }
 
-    @Transactional
-    public void deleteTodo(long userId, String todoId){
-        Todo todoToDelete = todoRepository.findByUserIdAndTodoId(userId, todoId);
-        todoToDelete.setIsDeleted(true);
-        todoRepository.save(todoToDelete);
+//    @Transactional
+//    public void deleteTodo(String userId, String todoId){
+//        Todo todoToDelete = todoRepository.findByUserIdAndTodoId(userId, todoId);
+//        todoToDelete.setIsDeleted(true);
+//        todoRepository.save(todoToDelete);
 //        todoRepository.deleteById(todoToDelete.getId());
 //        todos.removeIf(todo->(todo.getUserId()==userId && todo.getTodoId()==todoId));
-    }
+//    }
 
     public void updateTodo(String userName, String todoId, Todo todoPatch){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
 //        Todo todoToUpdate = todos.stream().filter(todo -> (todo.getTodoId()==todoId &&todo.getUserId()==userId))
 //                .findAny().get();
         Todo todoToUpdate = todoRepository.findByUserIdAndTodoId(userId, todoId);
@@ -100,7 +100,7 @@ public class TodoDaoService {
     }
 
     public void updateTodo(String userName, String todoId){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
 //        Todo todoToUpdate = todos.stream().filter(
 //                        todo -> (todo.getTodoId().equals(todoId) &&
 //                                todo.getUserId()==userId)
@@ -116,7 +116,7 @@ public class TodoDaoService {
     }
 
     public long countTodos(String userName, boolean statusFlag){
-        long userId = userDaoService.getUserIdFromName(userName);
+        String userId = userDaoService.getUserIdFromName(userName);
         return todoRepository.countByUserIdAndIsDoneAndIsDeleted(userId, statusFlag, false);
 //        return todos.stream()
 //                .filter(

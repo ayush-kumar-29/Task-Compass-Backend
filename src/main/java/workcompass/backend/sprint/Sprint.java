@@ -1,9 +1,6 @@
 package workcompass.backend.sprint;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -11,29 +8,44 @@ import java.time.LocalDate;
 @Table(name = "sprints_table")
 public class Sprint {
     @Id
-    @GeneratedValue
-    private Long sprintId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String sprintId;
     private String sprintName;
     private LocalDate sprintStartDate;
     private LocalDate sprintEndDate;
     private String status;
     private Integer statusCode;
+    private Boolean isDeleted;
 
-    public Sprint(Long sprintId, String sprintName, LocalDate sprintStartDate,
-                  LocalDate sprintEndDate, String status, Integer statusCode) {
+    public Sprint() {
+    }
+
+    public Sprint(Long id, String sprintId, String sprintName, LocalDate sprintStartDate,
+                  LocalDate sprintEndDate, String status, Integer statusCode, Boolean isDeleted) {
+        this.id=id;
         this.sprintId = sprintId;
         this.sprintName = sprintName;
         this.sprintStartDate = sprintStartDate;
         this.sprintEndDate = sprintEndDate;
         this.status = status;
         this.statusCode = statusCode;
+        this.isDeleted=isDeleted;
     }
 
-    public Long getSprintId() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSprintId() {
         return sprintId;
     }
 
-    public void setSprintId(Long sprintId) {
+    public void setSprintId(String sprintId) {
         this.sprintId = sprintId;
     }
 
@@ -77,15 +89,25 @@ public class Sprint {
         this.statusCode = statusCode;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Sprint{" +
-                "sprintId=" + sprintId +
+                "id=" + id +
+                ", sprintId='" + sprintId + '\'' +
                 ", sprintName='" + sprintName + '\'' +
                 ", sprintStartDate=" + sprintStartDate +
                 ", sprintEndDate=" + sprintEndDate +
                 ", status='" + status + '\'' +
                 ", statusCode=" + statusCode +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }
